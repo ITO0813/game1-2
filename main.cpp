@@ -3,6 +3,51 @@
 
 const char kWindowTitle[] = "GC1D_03_イトウヒビキ_タイトル";
 
+enum scene { 
+	titlescene,
+	mainscene,
+	clearscene
+};
+
+int Titlescene(char keys[], char preKeys[], int titleHandle) {
+	Novice::DrawSprite(0, 0, titleHandle, 1, 1, 0.0f, WHITE);
+
+	if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])	{
+		return mainscene;
+	}
+
+	else {
+		return titlescene;
+	}
+}
+
+int Mainscene(
+	char preKeys[], 
+	char keys[]
+	) {
+
+	if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+		return clearscene;
+	}
+
+	else {
+		return mainscene;
+	}
+}
+
+int Clearscene(char preKeys[], char keys[], int clearHandle) {
+
+	Novice::DrawSprite(0, 0, clearHandle, 1, 1, 0.0f, WHITE);
+
+	if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+		return titlescene;
+	}
+
+	else {
+		return clearscene;
+	}
+}
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -41,7 +86,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	for (int i = 0; i < 84; i++) {
-		Novice::LoadTexture("./Game_screen2.png");
+		Novice::LoadTexture("./images/Game_screen2.png");
 	};
 
 	int posX = 40;
@@ -52,7 +97,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int speed = 15;
 	int ScrollX = posX + posrad;
 	int playerScroll = posX - ScrollX;
-	int backgroundHandle = Novice::LoadTexture("./Game_screen2.png");
+
+	int titleHandle = Novice::LoadTexture("./images/title1.png");
+
+	int backgroundHandle = Novice::LoadTexture("./images/Game_screen2.png");
+	
+	int clearHandle = Novice::LoadTexture("./images/CLEAR.png");
+
+	int scene;
+	scene = titlescene;
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -67,30 +120,62 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
-		posX += speed;
+		int nextScene = scene;
 
-		ScrollX = posX + posrad;
-
-		if (ScrollX < 0) {
-			ScrollX = 0;
-		}
-		if (ScrollX > World_Width - 1280) {
-			ScrollX = World_Width - 1280;
-		}
-		playerScroll = posX - ScrollX;
-
-		if (posX >= backgroundX[21]) {
-			speed = 20;
-		}
-		if (posX >= backgroundX[42]) {
-			speed = 25;
-		}
-		if (posX >= backgroundX[63]) {
-			speed = 30;
+		if (scene == titlescene) {
+			nextScene = Titlescene(keys, preKeys, titleHandle);
 		}
 
-		if (posX >= 1280 * 83) {
-			speed = 0;
+		if (scene != nextScene) {
+			scene = nextScene;
+		}
+
+		if (scene == mainscene) {
+			nextScene = Mainscene(preKeys, keys);
+
+			posX += speed;
+
+			ScrollX = posX + posrad;
+
+			if (ScrollX < 0) {
+				ScrollX = 0;
+			}
+			if (ScrollX > World_Width - 1280) {
+				ScrollX = World_Width - 1280;
+			}
+			playerScroll = posX - ScrollX;
+
+			if (posX >= backgroundX[21]) {
+				speed = 20;
+			}
+			if (posX >= backgroundX[42]) {
+				speed = 25;
+			}
+			if (posX >= backgroundX[63]) {
+				speed = 30;
+			}
+
+			if (posX >= 1280 * 83) {
+				speed = 0;
+			}
+			
+			for (int i = 0; i < 84; i++) {
+				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
+			}
+			Novice::DrawBox(playerScroll - posrad, posY - posrad, posW, posH, 0.0, WHITE, kFillModeSolid);
+
+		}
+
+		if (scene != nextScene) {
+			scene = nextScene;
+		}
+
+		if (scene == clearscene) {
+			nextScene = Clearscene(keys, preKeys, clearHandle);
+		}
+
+		if (scene != nextScene) {
+			scene = nextScene;
 		}
 
 		///
@@ -103,12 +188,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Novice::ScreenPrintf(0, 0, "%d", posX);
 		Novice::ScreenPrintf(0, 20, "%d", speed);
-		for (int i = 0; i < 84; i++) {
-			Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
-		}
-		Novice::DrawBox(
-		    playerScroll - posrad, posY - posrad, posW, posH, 0.0, WHITE, kFillModeSolid);
-
+		
 		///
 		/// ↑描画処理ここまで
 		///
