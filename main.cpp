@@ -5,6 +5,7 @@ const char kWindowTitle[] = "かいひ！ボックス！";
 
 enum scene { 
 	titlescene,
+	trialscene,
 	mainscene,
 	clearscene
 };
@@ -13,12 +14,34 @@ int Titlescene(char keys[], char preKeys[], int titleHandle) {
 	Novice::DrawSprite(0, 0, titleHandle, 1, 1, 0.0f, WHITE);
 	
 	if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])	{
-		return mainscene;
+		return trialscene;
 	}
 
 	else {
 		return titlescene;
 	}
+}
+
+int Trialscene(
+    char keys[], char preKeys[], int playerRedHandle, int boxHandle, int ElipseHandle,
+    int BataconHandle,int playerBlueHandle) {
+
+	Novice::DrawSprite(100, 300, playerRedHandle, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(200, 100, boxHandle, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(400, 200, ElipseHandle, 1, 1, 0.0f, WHITE);
+	
+	Novice::DrawSprite(100, 600, playerBlueHandle, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(200, 400, boxHandle, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(400, 500, BataconHandle, 1, 1, 0.0f, WHITE);
+
+	if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+		return mainscene;
+	}
+
+	else {
+		return trialscene;
+	}
+
 }
 
 int Mainscene(int posX) {
@@ -105,8 +128,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int playerBlueHandle;
 	playerBlueHandle = Novice::LoadTexture("./images/playerBlue.png");
 
+	int ElipseHandle = Novice::LoadTexture("./images/Elipse.png");
+	int BataconHandle = Novice::LoadTexture("./images/Batu.png");
+
 	// 障害物当たり判定宣言
 	int boxX = 400;
+	int boxrad = 1;
+	int ScrollY = boxX + boxrad;
 
 	int boxXRed1 = 0;
 	int boxXRed2 = 0;
@@ -165,6 +193,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			scene = nextScene;
 		}
 
+		if (scene == trialscene) {
+			nextScene = Trialscene(keys, preKeys, playerRedHandle, boxHandle,ElipseHandle,BataconHandle,playerBlueHandle);
+
+			Novice::StopAudio(voiceHandle2);
+
+			if (Novice::IsPlayingAudio(voiceHandle1) == 0 || voiceHandle1 == -1) {
+				voiceHandle1 = Novice::PlayAudio(soundHandle2, false, 1.0f);
+			}
+		}
+
+		if (scene != nextScene) {
+			scene = nextScene;
+		}
+
 		if (scene == mainscene) {
 			nextScene = Mainscene(posX);
 
@@ -178,12 +220,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			posX += speed;
 
 			ScrollX = posX + posrad;
+			ScrollY = boxX + boxrad;
 
 			for (int i = 0; i < 64; i++) {
-				boxXRed1 = (boxX + 800 * i);
+				boxXRed1 = (boxX + 1280 * i) - ScrollY;
 				boxXRed2 = boxXRed1 + 100;
-			}
-			for (int i = 0; i < 64; i++) {
+			
 				posXAX1 = (posX + 32 * i);
 				posXAX2 = posXAX1 + 32;
 			}
@@ -195,6 +237,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ScrollX = World_Width - 1280;
 			}
 			playerScrollAX1 = posAX1 - ScrollX;
+
+			if (ScrollY < 0) {
+				ScrollY = 0;
+			}
+			if (ScrollY > World_Width - 1280) {
+				ScrollY = World_Width - 1280;
+			}
 
 			if (posX >= backgroundX[21]) {
 				speed = 15;
@@ -225,7 +274,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
 			}
 			for (int i = 0; i < 64; i++) {
-				Novice::DrawSprite((boxX + 800 * i) - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
+				Novice::DrawSprite((boxX + 1280 * i) - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
 			}
 
 			//モードの切り替え
