@@ -106,6 +106,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool is_player_hit = false;
 	bool is_player_hitX = false;
 
+	bool modeDefault = true;
+	bool modeBreak = false;
+	bool modeSlipthorugh = false;
+
 	int playerWhiteHandle;
 	playerWhiteHandle = Novice::LoadTexture("./images/playerWhite.png");
 	//int playerRedHandle;
