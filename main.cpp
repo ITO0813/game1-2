@@ -1,7 +1,7 @@
 #include <Novice.h>
 #include <math.h>
 
-const char kWindowTitle[] = "GC1D_03_イトウヒビキ_タイトル";
+const char kWindowTitle[] = "かいひ！ボックス！";
 
 enum scene { 
 	titlescene,
@@ -180,7 +180,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ScrollX = posX + posrad;
 
 			for (int i = 0; i < 64; i++) {
-				boxXRed1 = (boxX + 400 * i);
+				boxXRed1 = (boxX + 800 * i);
 				boxXRed2 = boxXRed1 + 100;
 			}
 			for (int i = 0; i < 64; i++) {
@@ -225,7 +225,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
 			}
 			for (int i = 0; i < 64; i++) {
-				Novice::DrawSprite((boxX + 980 * i) - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
+				Novice::DrawSprite((boxX + 800 * i) - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
 			}
 
 			//モードの切り替え
