@@ -89,13 +89,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	int posX = 32;
-	int posY = 560;
+	int posY = 580;
 	int posrad = 1;
 	int posW = 50;
 	int posH = 50;
 	int speed = 15;
 	int ScrollX = posX + posrad;
 	int playerScroll = posX - ScrollX;
+
+	int posAX1 = posX;
+	int posAX2 = posX + 16;
+
+	// 障害物当たり判定宣言
+	int boxX = 100;
+	int boxY = 300;
+
+	int boxAX1 = boxX;
+	int boxAX2 = boxX + 100;
+
+	bool is_player_hit = false;
+	bool is_player_hitX = false;
+
+	int playerWhiteHandle;
+	playerWhiteHandle = Novice::LoadTexture("./playerWhite.png");
+	int playerRedHandle;
+	playerRedHandle = Novice::LoadTexture("./playerRed.png");
+
+	int boxHandle;
+	boxHandle = Novice::LoadTexture("./breakver.png");
+	int boxHandle2;
+	boxHandle2 = Novice::LoadTexture("./inbijiver.png");
 
 	int titleHandle = Novice::LoadTexture("./images/title1.png");
 
