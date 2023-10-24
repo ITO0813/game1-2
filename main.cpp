@@ -180,6 +180,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (posX >= 1280 * 83) {
 				speed = 0;
 			}
+
+			//当たり判定
+			if (boxAX1 < posAX2 && posAX1 < boxAX2) {
+				is_player_hitX = true;
+			} else {
+				is_player_hitX = false;
+			}
+
+			if (is_player_hitX == true) {
+				is_player_hit = true;
+			} else {
+				is_player_hit = false;
+			}
 			
 			for (int i = 0; i < 84; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
