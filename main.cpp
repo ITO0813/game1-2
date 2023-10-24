@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int World_Width = 1280 * 83;
 
 	//[42]で約１分　 2分=[84] ３分＝[126]
-	int backgroundX[84]{
+	int backgroundX[64]{
 	    0,         1280 * 1,  1280 * 2,  1280 * 3,  
 		1280 * 4,  1280 * 5,  1280 * 6,  1280 * 7,
 	    1280 * 8,  1280 * 9,  1280 * 10, 1280 * 11,
@@ -75,14 +75,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		1280 * 52, 1280 * 53, 1280 * 54, 1280 * 55,
 	    1280 * 56, 1280 * 57, 1280 * 58, 1280 * 59,
 		1280 * 60, 1280 * 61, 1280 * 62, 1280 * 63,
-	    1280 * 64, 1280 * 65, 1280 * 66, 1280 * 67,
-		1280 * 68, 1280 * 69, 1280 * 70, 1280 * 71,
-	    1280 * 72, 1280 * 73, 1280 * 74, 1280 * 75,
-		1280 * 76, 1280 * 77, 1280 * 78, 1280 * 79,
-	    1280 * 80, 1280 * 81, 1280 * 82, 1280 * 83,
 	};
 
-	for (int i = 0; i < 84; i++) {
+	for (int i = 0; i < 64; i++) {
 		Novice::LoadTexture("./images/Game_screen2.png");
 	};
 
@@ -91,10 +86,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int posrad = 1;
 	int speed = 15;
 	int ScrollX = posX + posrad;
-	int playerScroll = posX - ScrollX;
 
 	int posAX1 = posX;
-	int posAX2 = posX + 32;
+	
+	int playerScrollAX1 = posAX1 - ScrollX;
+
+	int posXAX1 = 0;
+	int posXAX2 = 0;
 
 	bool modeDefault = true;
 	bool modeBreak = false;
@@ -110,8 +108,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 障害物当たり判定宣言
 	int boxX = 400;
 
-	int boxAX1 = boxX;
-	int boxAX2 = boxX + 100;
+	int boxXRed1 = 0;
+	int boxXRed2 = 0;
 
 	bool is_player_hit = false;
 	bool is_player_hitX = false;
@@ -181,30 +179,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			ScrollX = posX + posrad;
 
+			for (int i = 0; i < 64; i++) {
+				boxXRed1 = (boxX + 980 * i) - ScrollX;
+				boxXRed2 = boxXRed1 + 100;
+			}
+			for (int i = 0; i < 64; i++) {
+				posXAX1 = (posX + 32 * i) - ScrollX;
+				posXAX2 = posXAX1 + 32;
+			}
+
 			if (ScrollX < 0) {
 				ScrollX = 0;
 			}
 			if (ScrollX > World_Width - 1280) {
 				ScrollX = World_Width - 1280;
 			}
-			playerScroll = posX - ScrollX;
+			playerScrollAX1 = posAX1 - ScrollX;
 
 			if (posX >= backgroundX[21]) {
-				speed = 20;
+				speed = 25;
 			}
 			if (posX >= backgroundX[42]) {
 				speed = 25;
 			}
-			if (posX >= backgroundX[63]) {
-				speed = 30;
-			}
 
-			if (posX >= 1280 * 83) {
+			if (posX >= 1280 * 64) {
 				speed = 0;
 			}
 
 			//当たり判定
-			if (boxAX1 < posAX2 && posAX1 < boxAX2) {
+			if (boxXRed1 < posXAX2 && posXAX1 < boxXRed2) {
 				is_player_hitX = true;
 			} else {
 				is_player_hitX = false;
@@ -217,12 +221,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			
 			//背景の描画
-			for (int i = 0; i < 84; i++) {
+			for (int i = 0; i < 64; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
 			}
-
-			Novice::DrawSprite(boxAX1, 328, boxHandle, 1, 1, 0.0f, WHITE);
-			
+			for (int i = 0; i < 64; i++) {
+				Novice::DrawSprite((boxX + 980 * i) - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
+			}
 
 			//モードの切り替え
 			if (modeDefault == true) {
@@ -281,6 +285,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		Novice::ScreenPrintf(0, 0, "%d", is_player_hit);
 		Novice::ScreenPrintf(0, 10, "%d", is_player_hitX);
+		Novice::ScreenPrintf(0, 20, "%d<%d", posXAX1, boxXRed2);
+		Novice::ScreenPrintf(0, 40, "%d<%d", boxXRed1, posXAX2);		
 
 		///
 		/// ↑描画処理ここまで
