@@ -22,11 +22,10 @@ int Titlescene(char keys[], char preKeys[], int titleHandle) {
 }
 
 int Mainscene(
-	char preKeys[], 
-	char keys[]
+	int posX
 	) {
 
-	if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+	if (posX >= 106240) {
 		return clearscene;
 	}
 
@@ -131,7 +130,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		if (scene == mainscene) {
-			nextScene = Mainscene(preKeys, keys);
+			nextScene = Mainscene(posX);
 
 			posX += speed;
 
