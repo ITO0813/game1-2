@@ -191,6 +191,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			} else {
 				is_player_hit = false;
 			}
+
+			if (modeDefault == true) {
+				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+					modeBreak = true;
+					modeDefault = false;
+					modeSlipthorugh = false;
+				}
+			}
+
+			else if (modeBreak == true) {
+				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+					modeSlipthorugh = true;
+					modeDefault = false;
+					modeBreak = false;
+				}
+			}
+
+			else if (modeSlipthorugh == true) {
+				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+					modeDefault = true;
+					modeBreak = false;
+					modeSlipthorugh = false;
+				}
+			}
 			
 			for (int i = 0; i < 84; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
