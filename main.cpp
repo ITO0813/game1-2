@@ -96,16 +96,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int posAX1 = posX;
 	int posAX2 = posX + 32;
 
-	// 障害物当たり判定宣言
-	int boxX = 100;
-	//int boxY = 300;
-
-	int boxAX1 = boxX;
-	int boxAX2 = boxX + 100;
-
-	bool is_player_hit = false;
-	bool is_player_hitX = false;
-
 	bool modeDefault = true;
 	bool modeBreak = false;
 	bool modeSlipthorugh = false;
@@ -117,8 +107,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int playerBlueHandle;
 	playerBlueHandle = Novice::LoadTexture("./images/playerBlue.png");
 
-	//int boxHandle;
-	//boxHandle = Novice::LoadTexture("./images/breakver.png");
+	// 障害物当たり判定宣言
+	int boxX = 400;
+
+	int boxAX1 = boxX;
+	int boxAX2 = boxX + 100;
+
+	bool is_player_hit = false;
+	bool is_player_hitX = false;
+
+	int boxHandle;
+	boxHandle = Novice::LoadTexture("./images/breakver.png");
 	//int boxHandle2;
 	//boxHandle2 = Novice::LoadTexture("./images/inbijiver.png");
 
@@ -158,6 +157,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (scene == mainscene) {
 			nextScene = Mainscene(posX);
 
+			//スクロール関連
 			posX += speed;
 
 			ScrollX = posX + posrad;
@@ -197,10 +197,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				is_player_hit = false;
 			}
 			
+			//背景の描画
 			for (int i = 0; i < 84; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
+				if (boxX *  i) {
+					Novice::DrawSprite(boxAX1, 328, boxHandle, 1, 1, 0.0f, WHITE);
+				}
 			}
 
+			//モードの切り替え
 			if (modeDefault == true) {
 				Novice::DrawSprite(posAX1, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
@@ -227,7 +232,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					modeSlipthorugh = false;
 				}
 			}
-			
 		}
 
 		if (scene != nextScene) {
@@ -249,12 +253,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-
-
-		Novice::ScreenPrintf(0, 0, "%d", posX);
-		Novice::ScreenPrintf(0, 20, "%d", speed);
-
 		
+		Novice::ScreenPrintf(0, 0, "%d", is_player_hit);
+		Novice::ScreenPrintf(0, 10, "%d", is_player_hitX);
+
 		///
 		/// ↑描画処理ここまで
 		///
