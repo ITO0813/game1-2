@@ -151,7 +151,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
-
 		int nextScene = scene;
 
 		if (scene == titlescene) {
@@ -220,10 +219,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//背景の描画
 			for (int i = 0; i < 84; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
-				if (boxX *  i) {
-					Novice::DrawSprite(boxAX1, 328, boxHandle, 1, 1, 0.0f, WHITE);
-				}
 			}
+
+			Novice::DrawSprite(boxAX1, 328, boxHandle, 1, 1, 0.0f, WHITE);
+			
 
 			//モードの切り替え
 			if (modeDefault == true) {
