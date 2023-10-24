@@ -88,7 +88,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::LoadTexture("./images/Game_screen2.png");
 	};
 
-	int posX = 40;
+	int posX = 32;
 	int posY = 560;
 	int posrad = 1;
 	int posW = 50;
