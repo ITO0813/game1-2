@@ -112,10 +112,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int playerWhiteHandle;
 	playerWhiteHandle = Novice::LoadTexture("./images/playerWhite.png");
-	//int playerRedHandle;
-	//playerRedHandle = Novice::LoadTexture("./images/playerRed.png");
-	//int playerBlueHandle;
-	//playerBlueHandle = Novice::LoadTexture("./images/playerRed.png");
+	int playerRedHandle;
+	playerRedHandle = Novice::LoadTexture("./images/playerRed.png");
+	int playerBlueHandle;
+	playerBlueHandle = Novice::LoadTexture("./images/playerBlue.png");
 
 	//int boxHandle;
 	//boxHandle = Novice::LoadTexture("./images/breakver.png");
@@ -143,6 +143,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+
 
 		int nextScene = scene;
 
@@ -195,8 +196,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			} else {
 				is_player_hit = false;
 			}
+			
+			for (int i = 0; i < 84; i++) {
+				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
+			}
 
 			if (modeDefault == true) {
+				Novice::DrawSprite(posAX1, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					modeBreak = true;
 					modeDefault = false;
@@ -205,6 +211,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			else if (modeBreak == true) {
+				Novice::DrawSprite(posAX1, posY, playerRedHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					modeSlipthorugh = true;
 					modeDefault = false;
@@ -213,6 +220,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			else if (modeSlipthorugh == true) {
+				Novice::DrawSprite(posAX1, posY, playerBlueHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					modeDefault = true;
 					modeBreak = false;
@@ -220,10 +228,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 			
-			for (int i = 0; i < 84; i++) {
-				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
-			}
-			Novice::DrawSprite(posAX1, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
 		}
 
 		if (scene != nextScene) {
@@ -246,8 +250,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+
 		Novice::ScreenPrintf(0, 0, "%d", posX);
 		Novice::ScreenPrintf(0, 20, "%d", speed);
+
 		
 		///
 		/// ↑描画処理ここまで
