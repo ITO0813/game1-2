@@ -39,7 +39,7 @@ int Clearscene(char preKeys[], char keys[], int clearHandle) {
 
 	Novice::DrawSprite(0, 0, clearHandle, 1, 1, 0.0f, WHITE);
 
-	if (!keys[DIK_SPACE] && preKeys[DIK_SPACE]) {
+	if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 		return titlescene;
 	}
 
