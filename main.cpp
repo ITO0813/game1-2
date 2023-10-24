@@ -11,7 +11,7 @@ enum scene {
 
 int Titlescene(char keys[], char preKeys[], int titleHandle) {
 	Novice::DrawSprite(0, 0, titleHandle, 1, 1, 0.0f, WHITE);
-
+	
 	if (!keys[DIK_SPACE] && preKeys[DIK_SPACE])	{
 		return mainscene;
 	}
@@ -130,6 +130,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int scene;
 	scene = titlescene;
 
+	int soundHandle = Novice::LoadAudio("./bgms/MusMus-BGM-141.mp3");
+	int soundHandle2 = Novice::LoadAudio("./bgms/MusMus-BGM-130.mp3");
+	int soundHandle3 = Novice::LoadAudio("./bgms/MusMus-BGM-131.mp3");
+
+	int voiceHandle1 = -1;
+	int voiceHandle2 = -1;
+	int voiceHandle3 = -1;
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -148,6 +156,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (scene == titlescene) {
 			nextScene = Titlescene(keys, preKeys, titleHandle);
+
+			Novice::StopAudio(voiceHandle2);
+
+			if (Novice::IsPlayingAudio(voiceHandle1) == 0 || voiceHandle1 == -1) {
+				voiceHandle1 = Novice::PlayAudio(soundHandle2, false, 1.0f);
+			}
 		}
 
 		if (scene != nextScene) {
@@ -156,6 +170,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (scene == mainscene) {
 			nextScene = Mainscene(posX);
+
+			Novice::StopAudio(voiceHandle1);
+
+			if (!Novice::IsPlayingAudio(voiceHandle2) || voiceHandle2 == -1) {
+				voiceHandle2 = Novice::PlayAudio(soundHandle, false, 1.0f);
+			}
 
 			//スクロール関連
 			posX += speed;
@@ -239,7 +259,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		if (scene == clearscene) {
-			nextScene = Clearscene(keys, preKeys, clearHandle);
+			nextScene =Clearscene(keys, preKeys, clearHandle);
+
+			Novice::StopAudio(voiceHandle2);
+
+			if (!Novice::IsPlayingAudio(voiceHandle3) || voiceHandle3 == -1) {
+				voiceHandle3 = Novice::PlayAudio(soundHandle3, false, 1.0f);
+			}
 		}
 
 		if (scene != nextScene) {
