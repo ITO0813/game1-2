@@ -89,20 +89,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	int posX = 32;
-	int posY = 580;
+	int posY = 596;
 	int posrad = 1;
-	int posW = 50;
-	int posH = 50;
 	int speed = 15;
 	int ScrollX = posX + posrad;
 	int playerScroll = posX - ScrollX;
 
 	int posAX1 = posX;
-	int posAX2 = posX + 16;
+	int posAX2 = posX + 32;
 
 	// 障害物当たり判定宣言
 	int boxX = 100;
-	int boxY = 300;
+	//int boxY = 300;
 
 	int boxAX1 = boxX;
 	int boxAX2 = boxX + 100;
@@ -111,14 +109,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool is_player_hitX = false;
 
 	int playerWhiteHandle;
-	playerWhiteHandle = Novice::LoadTexture("./playerWhite.png");
-	int playerRedHandle;
-	playerRedHandle = Novice::LoadTexture("./playerRed.png");
+	playerWhiteHandle = Novice::LoadTexture("./images/playerWhite.png");
+	//int playerRedHandle;
+	//playerRedHandle = Novice::LoadTexture("./images/playerRed.png");
+	//int playerBlueHandle;
+	//playerBlueHandle = Novice::LoadTexture("./images/playerRed.png");
 
-	int boxHandle;
-	boxHandle = Novice::LoadTexture("./breakver.png");
-	int boxHandle2;
-	boxHandle2 = Novice::LoadTexture("./inbijiver.png");
+	//int boxHandle;
+	//boxHandle = Novice::LoadTexture("./images/breakver.png");
+	//int boxHandle2;
+	//boxHandle2 = Novice::LoadTexture("./images/inbijiver.png");
 
 	int titleHandle = Novice::LoadTexture("./images/title1.png");
 
@@ -197,7 +197,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < 84; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
 			}
-			Novice::DrawBox(playerScroll - posrad, posY - posrad, posW, posH, 0.0, WHITE, kFillModeSolid);
+			Novice::DrawSprite(posAX1, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
 
 		}
 
