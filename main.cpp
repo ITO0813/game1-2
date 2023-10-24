@@ -21,9 +21,7 @@ int Titlescene(char keys[], char preKeys[], int titleHandle) {
 	}
 }
 
-int Mainscene(
-	int posX
-	) {
+int Mainscene(int posX) {
 
 	if (posX >= 106240) {
 		return clearscene;
@@ -198,7 +196,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
 			}
 			Novice::DrawSprite(posAX1, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
-
 		}
 
 		if (scene != nextScene) {
