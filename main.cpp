@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int posX = 32;
 	int posY = 596;
 	int posrad = 1;
-	int speed = 15;
+	int speed = 10;
 	int ScrollX = posX + posrad;
 
 	int posAX1 = posX;
@@ -180,11 +180,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ScrollX = posX + posrad;
 
 			for (int i = 0; i < 64; i++) {
-				boxXRed1 = (boxX + 980 * i) - ScrollX;
+				boxXRed1 = (boxX + 400 * i);
 				boxXRed2 = boxXRed1 + 100;
 			}
 			for (int i = 0; i < 64; i++) {
-				posXAX1 = (posX + 32 * i) - ScrollX;
+				posXAX1 = (posX + 32 * i);
 				posXAX2 = posXAX1 + 32;
 			}
 
@@ -197,10 +197,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			playerScrollAX1 = posAX1 - ScrollX;
 
 			if (posX >= backgroundX[21]) {
-				speed = 25;
+				speed = 15;
 			}
 			if (posX >= backgroundX[42]) {
-				speed = 25;
+				speed = 20;
 			}
 
 			if (posX >= 1280 * 64) {
