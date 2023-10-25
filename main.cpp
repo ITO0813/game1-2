@@ -46,7 +46,7 @@ int Trialscene(
 
 int Mainscene(int posX) {
 
-	if (posX >= 106240) {
+	if (posX >= 80640) {
 		return clearscene;
 	}
 
@@ -78,10 +78,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	const int World_Width = 1280 * 83;
+	const int World_Width = 1280 * 64;
+	const int kBoxRedMax = 64;
 
 	//[42]で約１分　 2分=[84] ３分＝[126]
-	int backgroundX[64]{
+	int backgroundX[kBoxRedMax]{
 	    0,         1280 * 1,  1280 * 2,  1280 * 3,  
 		1280 * 4,  1280 * 5,  1280 * 6,  1280 * 7,
 	    1280 * 8,  1280 * 9,  1280 * 10, 1280 * 11,
@@ -133,20 +134,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// 障害物当たり判定宣言
 	int boxX = 400;
+	int boxY = 800;
 	int boxrad = 1;
 	int ScrollY = boxX + boxrad;
 
-	const int kBoxRedMax = 64;
+	
 	int boxXRed1[kBoxRedMax] = {};
 	int boxXRed2[kBoxRedMax] = {};
+
+	int boxXBlue1[kBoxRedMax] = {};
+	int boxXBlue2[kBoxRedMax] = {};
 
 	bool is_player_hit = false;
 	bool is_player_hitX = false;
 
 	int boxHandle;
 	boxHandle = Novice::LoadTexture("./images/breakver.png");
-	//int boxHandle2;
-	//boxHandle2 = Novice::LoadTexture("./images/inbijiver.png");
+	int boxHandle2;
+	boxHandle2 = Novice::LoadTexture("./images/inbijiver.png");
 
 	int titleHandle = Novice::LoadTexture("./images/title1.png");
 	int backgroundHandle = Novice::LoadTexture("./images/Game_screen2.png");
@@ -228,6 +233,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < kBoxRedMax; i++) {
 				boxXRed1[i] = (boxX + 1280 * i);
 				boxXRed2[i] = boxXRed1[i] + 100;
+
+				boxXBlue1[i] = (boxY + 1280 * i);
+				boxXBlue2[i] = boxXBlue1[i] + 100;
 			
 				posXAX1 = (posX + 32 * i);
 				posXAX2 = posXAX1 + 32;
@@ -248,11 +256,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ScrollY = World_Width - 1280;
 			}
 
-			if (posX >= backgroundX[21]) {
-				speed = 15;
+			if (posX >= backgroundX[16]) {
+				speed = 18;
 			}
-			if (posX >= backgroundX[42]) {
+			if (posX >= backgroundX[32]) {
 				speed = 20;
+			}
+			if (posX >= backgroundX[48]) {
+				speed = 24;
 			}
 
 			//当たり判定
@@ -272,6 +283,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					is_player_hitX = false;
 				}
 
+				if (modeSlipthorugh == true) {
+					if (boxXBlue1[i] < posXAX2 && posXAX1 < boxXBlue2[i]) {
+						is_player_hitX = false;
+					} else {
+						is_player_hitX = false;
+					}
+				}
+
+				else if (boxXRed1[i] < posXAX2 && posXAX1 < boxXRed2[i]) {
+					is_player_hitX = true;
+				} else {
+					is_player_hitX = false;
+				}
+
+
+
 				if (is_player_hitX == true) {
 					is_player_hit = true;
 				} else {
@@ -285,6 +312,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			for (int i = 0; i < kBoxRedMax; i++) {
 				Novice::DrawSprite(boxXRed1[i] - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
+			}
+			for (int i = 0; i < kBoxRedMax; i++) {
+				Novice::DrawSprite(boxXBlue1[i] - ScrollX, 328, boxHandle2, 1, 1, 0.0f, WHITE);
 			}
 
 			//モードの切り替え
