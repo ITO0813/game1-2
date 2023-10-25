@@ -136,8 +136,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int boxrad = 1;
 	int ScrollY = boxX + boxrad;
 
-	int boxXRed1 = 0;
-	int boxXRed2 = 0;
+	const int kBoxRedMax = 64;
+	int boxXRed1[kBoxRedMax] = {};
+	int boxXRed2[kBoxRedMax] = {};
 
 	bool is_player_hit = false;
 	bool is_player_hitX = false;
@@ -148,9 +149,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//boxHandle2 = Novice::LoadTexture("./images/inbijiver.png");
 
 	int titleHandle = Novice::LoadTexture("./images/title1.png");
-
 	int backgroundHandle = Novice::LoadTexture("./images/Game_screen2.png");
-	
 	int clearHandle = Novice::LoadTexture("./images/CLEAR.png");
 
 	int scene;
@@ -222,9 +221,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ScrollX = posX + posrad;
 			ScrollY = boxX + boxrad;
 
-			for (int i = 0; i < 64; i++) {
-				boxXRed1 = (boxX + 1280 * i) - ScrollY;
-				boxXRed2 = boxXRed1 + 100;
+			
+			// Playerの座標更新
+			posAX1 = posX + posrad;
+
+			for (int i = 0; i < kBoxRedMax; i++) {
+				boxXRed1[i] = (boxX + 1280 * i);
+				boxXRed2[i] = boxXRed1[i] + 100;
 			
 				posXAX1 = (posX + 32 * i);
 				posXAX2 = posXAX1 + 32;
@@ -252,34 +255,41 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				speed = 20;
 			}
 
-			if (posX >= 1280 * 64) {
-				speed = 0;
-			}
-
 			//当たり判定
-			if (boxXRed1 < posXAX2 && posXAX1 < boxXRed2) {
-				is_player_hitX = true;
-			} else {
-				is_player_hitX = false;
-			}
+			for (int i = 0; i < kBoxRedMax; i++) {
+				
+				if (modeBreak == true){
+					if (boxXRed1[i] < posXAX2 && posXAX1 < boxXRed2[i]) {
+						is_player_hitX = false;
+					} else {
+						is_player_hitX = false;
+					}
+				}
 
-			if (is_player_hitX == true) {
-				is_player_hit = true;
-			} else {
-				is_player_hit = false;
+				else if (boxXRed1[i] < posXAX2 && posXAX1 < boxXRed2[i]) {
+					is_player_hitX = true;
+				} else {
+					is_player_hitX = false;
+				}
+
+				if (is_player_hitX == true) {
+					is_player_hit = true;
+				} else {
+					is_player_hit = false;
+				}
 			}
 			
 			//背景の描画
-			for (int i = 0; i < 64; i++) {
+			for (int i = 0; i < kBoxRedMax; i++) {
 				Novice::DrawSprite(backgroundX[i] - ScrollX, 0, backgroundHandle, 1, 1, 0.0f, WHITE);
 			}
-			for (int i = 0; i < 64; i++) {
-				Novice::DrawSprite((boxX + 1280 * i) - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
+			for (int i = 0; i < kBoxRedMax; i++) {
+				Novice::DrawSprite(boxXRed1[i] - ScrollX, 328, boxHandle, 1, 1, 0.0f, WHITE);
 			}
 
 			//モードの切り替え
 			if (modeDefault == true) {
-				Novice::DrawSprite(posAX1, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
+				Novice::DrawSprite(posAX1 - ScrollX, posY, playerWhiteHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					modeBreak = true;
 					modeDefault = false;
@@ -288,7 +298,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			else if (modeBreak == true) {
-				Novice::DrawSprite(posAX1, posY, playerRedHandle, 1, 1, 0.0f, WHITE);
+				Novice::DrawSprite(posAX1 - ScrollX, posY, playerRedHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					modeSlipthorugh = true;
 					modeDefault = false;
@@ -297,7 +307,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			else if (modeSlipthorugh == true) {
-				Novice::DrawSprite(posAX1, posY, playerBlueHandle, 1, 1, 0.0f, WHITE);
+				Novice::DrawSprite(posAX1 - ScrollX, posY, playerBlueHandle, 1, 1, 0.0f, WHITE);
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 					modeDefault = true;
 					modeBreak = false;
@@ -331,11 +341,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		
-		Novice::ScreenPrintf(0, 0, "%d", is_player_hit);
-		Novice::ScreenPrintf(0, 10, "%d", is_player_hitX);
-		Novice::ScreenPrintf(0, 20, "%d<%d", posXAX1, boxXRed2);
-		Novice::ScreenPrintf(0, 40, "%d<%d", boxXRed1, posXAX2);		
 
 		///
 		/// ↑描画処理ここまで
